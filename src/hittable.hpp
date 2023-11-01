@@ -3,23 +3,24 @@
 
 #include "ray.hpp"
 #include "vec3.hpp"
+#include "interval.hpp"
 
 class Hittable {
     public:
-        struct hit_record {
+        struct Hit_Record {
             point3 point;
             vec3 normal;
             double t;
             bool front_face;
 
-            hit_record() {
+            Hit_Record() {
                 point = point3();
                 normal = vec3();
                 t = 0.0;
                 front_face = false;
             }
 
-            hit_record(point3 _point, vec3 _normal, double _t, bool _front_face) {
+            Hit_Record(point3 _point, vec3 _normal, double _t, bool _front_face) {
                 point = _point;
                 normal = _normal;
                 t = _t;
@@ -33,7 +34,7 @@ class Hittable {
         };
 
 
-        virtual bool hit(const ray& r, double t_min, double t_max, hit_record& hr) const = 0;
+        virtual bool hit(const ray& r, const Interval& interval, Hit_Record& hr) const = 0;
 };
 
 #endif

@@ -6,6 +6,10 @@
 #include "vec3.hpp"
 #include "ray.hpp"
 #include "sphere.hpp"
+#include "hittable_collection.hpp"
+#include "interval.hpp"
+
+#include "pathtracingutil.hpp"
 
 
 bool hit_sphere(const point3& center, double radius, const ray& r) {
@@ -17,7 +21,7 @@ bool hit_sphere(const point3& center, double radius, const ray& r) {
     return (discriminant > 0);
 }
 
-Color ray_color(const ray& r, Hittable::hit_record& hr) {
+Color ray_color(const ray& r, Hittable::Hit_Record& hr) {
     return 0.5*Color(hr.normal.x() + 1, hr.normal.y() + 1, hr.normal.z() + 1);
 }
 
@@ -34,7 +38,7 @@ int main() {
 
     //camera
     const point3 camera_origin = point3(0.0, 0.0, 0.0);
-    const double focal_length = 1.0;
+    const double focal_length = 2.0;
 
     //viewport
     const double viewport_height = 2.0;
@@ -50,8 +54,13 @@ int main() {
     point3 viewport_upper_left = camera_origin + point3(-viewport_width / 2, viewport_height / 2, -focal_length);
     point3 upper_left_pixel = viewport_upper_left + pixel_delta_u / 2 + pixel_delta_v / 2;
 
-    //spheres
-    Sphere sphere1 = Sphere(point3(0, 0, -1), 0.5);
+    //spheres and objects
+    Hittable_Collection world;
+    auto sphere1 = make_shared<Sphere>(point3(-0.5, 0, -2), 0.5);
+    world.add(sphere1);
+    world.add(make_shared<Sphere>(point3(0, -100.5, -2), 100));
+    world.add(make_shared<Sphere>(point3(2, 1, -10), 1));
+  
 
     //Render image:
     //header
@@ -70,9 +79,9 @@ int main() {
             
 
             //ray hits
-            Hittable::hit_record hr;
+            Hittable::Hit_Record hr;
 
-            Color c = sphere1.hit(r, 0, DBL_MAX, hr) ? ray_color(r, hr) : Color(0.2, 0.2, 0.2);
+            Color c = world.hit(r, Interval::positive, hr) ? ray_color(r, hr) : Color(0.4, 0.4, 0.4);
 
             write_color(output, c);
         }

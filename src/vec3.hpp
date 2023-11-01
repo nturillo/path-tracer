@@ -23,7 +23,6 @@ class vec3 {
     double y() const { return elements[1]; }
     double z() const { return elements[2]; }
 
-    double operator[](int i) const { return elements[i]; }
     double& operator[](int i) { return elements[i]; }
 
     vec3 operator-() const { return vec3(-elements[0], -elements[1], -elements[2]); }
@@ -50,6 +49,7 @@ class vec3 {
     double length_squared() const {
         return elements[0]*elements[0] + elements[1]*elements[1] + elements[2]*elements[2];
     }
+    
 };
 
 // Type aliases for vec3
