@@ -1,5 +1,4 @@
-#ifndef VEC3_HPP
-#define VEC3_HPP
+#pragma once
 
 #include <cmath>
 #include <iostream>
@@ -52,8 +51,7 @@ class vec3 {
     
 };
 
-// Type aliases for vec3
-typedef vec3 point3; // 3D point
+typedef vec3 point3;
 
 // vec3 Utility Functions
 inline std::ostream& operator<<(std::ostream &out, const vec3 &v) {
@@ -99,5 +97,3 @@ inline vec3 cross(const vec3 &u, const vec3 &v) {
 inline vec3 unit_vector(vec3 v) {
     return v / v.length();
 }
-
-#endif

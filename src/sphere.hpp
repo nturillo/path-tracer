@@ -1,5 +1,4 @@
-#ifndef SPHERE_HPP
-#define SPHERE_HPP
+#pragma once
 
 #include "hittable.hpp"
 
@@ -44,5 +43,3 @@ class Sphere : public Hittable {
     point3 center;
     double radius;
 };
-
-#endif

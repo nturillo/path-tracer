@@ -1,5 +1,4 @@
-#ifndef HITTABLE_HPP
-#define HITTABLE_HPP
+#pragma once
 
 #include "ray.hpp"
 #include "vec3.hpp"
@@ -36,5 +35,3 @@ class Hittable {
 
         virtual bool hit(const ray& r, const Interval& interval, Hit_Record& hr) const = 0;
 };
-
-#endif
