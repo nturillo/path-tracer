@@ -15,6 +15,9 @@ struct Interval {
 	bool contains_open(double t) const {
 		return (t > min) && (t < max);
 	}
+	double clamp(double t) const {
+		return std::max(min, std::min(max, t));
+	}
 
 	static const Interval empty, R, positive, negative;
 };

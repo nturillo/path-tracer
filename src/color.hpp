@@ -6,6 +6,8 @@
 typedef vec3 Color; // RGB color
 
 inline int to_255(double x) {
+    Interval i(0.0, 1.0);
+    x = i.clamp(x);
     return static_cast<int>(x >= 1.0 ? 255.0 : 256.0 * x);
 }
 
