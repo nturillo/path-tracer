@@ -1,10 +1,10 @@
 #include "camera.hpp"
 
 
-Camera::Camera() : aspect_ratio(), image_height(), image_width(), focal_length(), origin(), facing(), viewport_height(), samples_per_pixel() {
+Camera::Camera() : aspect_ratio(), image_height(), image_width(), focal_length(), origin(), facing(), viewport_height(), samples_per_pixel(), max_depth() {
 	initalize();
 }
-Camera::Camera(int _image_height, double _aspect_ratio, point3 _origin, vec3 _facing, double _focal_length, double _viewport_height, int _samples_per_pixel) {
+Camera::Camera(int _image_height, double _aspect_ratio, point3 _origin, vec3 _facing, double _focal_length, double _viewport_height, int _samples_per_pixel, int _max_depth) {
 	image_height = _image_height;
 	aspect_ratio = _aspect_ratio;
 	image_width = static_cast<int>(image_height * aspect_ratio);
@@ -13,6 +13,7 @@ Camera::Camera(int _image_height, double _aspect_ratio, point3 _origin, vec3 _fa
 	focal_length = _focal_length;
 	viewport_height = _viewport_height;
 	samples_per_pixel = _samples_per_pixel;
+	max_depth = _max_depth;
 	initalize();
 }
 Camera::Camera(CameraPreset preset, point3 _origin, vec3 _facing) {
@@ -23,6 +24,7 @@ Camera::Camera(CameraPreset preset, point3 _origin, vec3 _facing) {
 			focal_length = 1.0;
 			viewport_height = 2.0;
 			samples_per_pixel = 20;
+			max_depth = 50;
 			break;
 	}
 	origin = _origin;
@@ -45,13 +47,7 @@ void Camera::render(const Hittable& world, std::ostream& output) const {
 			Color c;
 			for (int i = 0; i < samples_per_pixel; i++) {
 				ray r = get_ray(row, col);
-				Hittable::Hit_Record hr;
-				if (world.hit(r, Interval::positive, hr)) {
-					c += ray_color(r, hr);
-				}
-				else {
-					c += background;
-				}
+				c += ray_color(r, world);
 			}
 			c /= samples_per_pixel;
 
@@ -97,13 +93,21 @@ vec3 Camera::pixel_sample_square() const {
 	return hor_offset + vert_offset;
 }
 
-Color Camera::ray_color(const ray& r, const Hittable::Hit_Record& hr) const {
-	//normal
-	vec3 normal = hr.normal;
-	normal = unit_vector(normal);
+Color Camera::ray_color(const ray& r, const Hittable& world) const {
+	ray temp_r = r;
+	
+	Color c(0.3, 0.3, 0.6);
 
-	//color
-	Color c = 0.5 * (normal + Color(1.0, 1.0, 1.0));
+	for (int i = 0; i < max_depth; i++) {
+		Hit_Record hr;
+		if (world.hit(temp_r, Interval(0.001, DBL_MAX), hr)) {
+			ray scattered;
+			if (!hr.material->scatter(temp_r, hr, c)) break; //ray is absorbed
+		}
+		else {
+			break; //ray doesn't hit anything
+		}
+	}
 
 	return c;
 }

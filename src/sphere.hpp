@@ -5,7 +5,7 @@
 class Sphere : public Hittable {
     public:
     Sphere() : center(), radius() {};
-    Sphere(point3 _center, double _radius) : center(_center), radius(_radius) {};
+    Sphere(point3 _center, double _radius, shared_ptr<Material> _material) : center(_center), radius(_radius), material(_material) {};
 
     bool hit(const ray& r, const Interval& interval, Hit_Record& hr) const override {
         vec3 center_to_origin = r.get_origin() - center; //vec from circle center to ray origin
@@ -34,12 +34,14 @@ class Sphere : public Hittable {
         hr.point = hit_point;
         hr.normal = hit_normal_u;
         hr.t = t;
-        //hr.set_face_normal(r, hit_normal);
+        hr.set_face_normal(r, hit_normal);
+        hr.material = this->material;
 
         return true;
     }
 
     private:
+    shared_ptr<Material> material;
     point3 center;
     double radius;
 };

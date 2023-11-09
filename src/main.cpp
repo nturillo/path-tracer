@@ -26,10 +26,12 @@ int main() {
 
     //camera
     Camera cam = Camera(Camera::CameraPreset::Standard, point3(0, 0, 0), vec3(0, 0, -1));
-   
+    cam.samples_per_pixel = 20;
+
     //spheres and objects
     Hittable_Collection world;
     auto sphere1 = make_shared<Sphere>(point3(-0.5, 0, -2), 0.5);
+
     world.add(sphere1);
     world.add(make_shared<Sphere>(point3(0, -2.5, -3), 2));
     world.add(make_shared<Sphere>(point3(2, 1, -10), 1));

@@ -14,24 +14,24 @@ public:
 		Standard
 	};
 	Camera();
-	Camera(int _image_height, double _aspect_ratio, point3 origin, vec3 facing, double focal_length, double viewport_height, int _samples_per_pixel);
+	Camera(int _image_height, double _aspect_ratio, point3 origin, vec3 facing, double focal_length, double viewport_height, int _samples_per_pixel, int _max_depth);
 	Camera(CameraPreset preset, point3 _origin, vec3 _facing);
 	void render(const Hittable& world, std::ostream& output) const;
 	void initalize();
 
-	//camera
+	//camera sizes
 	double aspect_ratio;
 	int image_height;
 	vec3 origin;
 	vec3 facing;
 	double focal_length;
 
+	//camera mechanics
+	int samples_per_pixel;
+	int max_depth;
 
 	//viewport
 	double viewport_height;
-
-	//anti-aliasing
-	int samples_per_pixel;
 
 private:
 	//camera
@@ -52,5 +52,5 @@ private:
 
 	ray get_ray(int row, int col) const;
 	vec3 pixel_sample_square() const;
-	Color ray_color(const ray& r, const Hittable::Hit_Record& hr) const;
+	Color ray_color(const ray& r, const Hittable& world) const;
 };

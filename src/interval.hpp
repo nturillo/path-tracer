@@ -1,6 +1,7 @@
 #pragma once
 
 #include <limits>
+#include <algorithm>
 
 struct Interval {
 	double min;

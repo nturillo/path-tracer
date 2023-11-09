@@ -3,6 +3,10 @@
 #include <random>
 #include <chrono>
 
+#include "pathtracingutil.hpp"
+#include "interval.hpp"
+
+
 class Random
 {
 public:
@@ -15,9 +19,6 @@ public:
 		static std::mt19937 gen(seed);
 		static std::uniform_real_distribution<> dis(min, max);
 		return dis(gen);
-	}
-	static inline double get_rand_double(Interval i, int seed = std::chrono::system_clock::now().time_since_epoch().count()) {
-		return get_rand_double(i.min, i.max, seed);
 	}
 };
 
