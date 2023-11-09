@@ -3,7 +3,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "random.hpp"
+
 
 class vec3 {
     public:
@@ -51,16 +51,17 @@ class vec3 {
         return elements[0]*elements[0] + elements[1]*elements[1] + elements[2]*elements[2];
     }
 
-    static vec3 random(int seed = std::chrono::system_clock::now().time_since_epoch().count()) {
-        return vec3(Random::get_rand_double(seed), Random::get_rand_double(seed + 1), Random::get_rand_double(seed + 2));
+    static vec3 random_vec(int seed = std::chrono::system_clock::now().time_since_epoch().count()) {
+        return vec3(get_random_double(), get_random_double(), get_random_double());
     }
-    static vec3 random(double min, double max, int seed = std::chrono::system_clock::now().time_since_epoch().count()) {
-		return vec3(Random::get_rand_double(min, max, seed), Random::get_rand_double(min, max, seed + 1), Random::get_rand_double(min, max, seed + 2));
+    static vec3 random_vec(double min, double max) {
+		return vec3(get_random_double(min, max), get_random_double(min, max), get_random_double(min, max));
 	}
     static vec3 random_unit_vec(int seed = std::chrono::system_clock::now().time_since_epoch().count()) {
-		double a = Random::get_rand_double(0, 2 * pi, seed);
-		double z = Random::get_rand_double(-1, 1, seed + 1);
-		return vec3(std::cos(a), std::sin(a), z);
+		double a = get_random_double(0, 2 * pi);
+		double z = get_random_double(-1, 1);
+        double r = std::sqrt(1 - z * z);
+		return vec3(std::cos(a) * r, std::sin(a) * r, z);
 	}
 };
 

@@ -4,7 +4,7 @@
 
 #include "pathtracingutil.hpp"
 #include "hittable.hpp"
-#include "random.hpp"
+
 
 
 class Camera

@@ -6,6 +6,8 @@
 #include "sphere.hpp"
 #include "hittable_collection.hpp"
 #include "camera.hpp"
+#include "material.hpp"
+#include "lambertian.hpp"
 
 
 
@@ -20,6 +22,17 @@ bool hit_sphere(const point3& center, double radius, const ray& r) {
 
 
 int main() {
+    //test random vectors
+    vec3 avg;
+    int samples = 0;
+    for (int i = 0; i < 1000; i++) {
+        vec3 random_vec = vec3::random_unit_vec();
+        if (random_vec.z() < 0) continue;
+        avg += random_vec;
+        samples++;
+    }
+    avg /= samples;
+    std::cout << "Average random vector: " << avg << std::endl;
     //output
     std::string output_path = "image_output/test_image.ppm";
     auto output = std::ofstream(output_path);
@@ -30,11 +43,14 @@ int main() {
 
     //spheres and objects
     Hittable_Collection world;
-    auto sphere1 = make_shared<Sphere>(point3(-0.5, 0, -2), 0.5);
+    Lambertian sphere_mat = Lambertian(Color(0.5, 0.5, 0.5));
+    shared_ptr<Material> sphere_mat_ptr = make_shared<Lambertian>(sphere_mat);
+    Sphere earth = Sphere(point3(0, -50.5, -2), 50, sphere_mat_ptr);
+    Sphere sphere = Sphere(point3(0, 0, -1), 0.5, sphere_mat_ptr);
 
-    world.add(sphere1);
-    world.add(make_shared<Sphere>(point3(0, -2.5, -3), 2));
-    world.add(make_shared<Sphere>(point3(2, 1, -10), 1));
+    world.add(make_shared<Sphere>(earth));
+    world.add(make_shared<Sphere>(sphere));
+    
   
 
     //Render image:

@@ -88,15 +88,17 @@ ray Camera::get_ray(int row, int col) const {
 }
 
 vec3 Camera::pixel_sample_square() const {
-	vec3 hor_offset = pixel_delta_hor * (Random::get_rand_double(2) - 0.5);
-	vec3 vert_offset = pixel_delta_vert * (Random::get_rand_double(2) - 0.5);
+	vec3 hor_offset = pixel_delta_hor * (get_random_double() - 0.5);
+	vec3 vert_offset = pixel_delta_vert * (get_random_double() - 0.5);
 	return hor_offset + vert_offset;
 }
 
 Color Camera::ray_color(const ray& r, const Hittable& world) const {
 	ray temp_r = r;
 	
-	Color c(0.3, 0.3, 0.6);
+	vec3 unit_direction = unit_vector(r.get_direction());
+	double a = 0.5 * (unit_direction.y() + 1.0);
+	Color c = (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);
 
 	for (int i = 0; i < max_depth; i++) {
 		Hit_Record hr;

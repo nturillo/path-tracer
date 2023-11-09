@@ -32,9 +32,8 @@ class Sphere : public Hittable {
         vec3 hit_normal_u = hit_normal / radius;
         
         hr.point = hit_point;
-        hr.normal = hit_normal_u;
         hr.t = t;
-        hr.set_face_normal(r, hit_normal);
+        hr.set_face_normal(r, hit_normal_u);
         hr.material = this->material;
 
         return true;
