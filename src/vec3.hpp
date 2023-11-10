@@ -63,6 +63,10 @@ class vec3 {
         double r = std::sqrt(1 - z * z);
 		return vec3(std::cos(a) * r, std::sin(a) * r, z);
 	}
+
+    bool near_zero() {
+        return (std::abs(elements[0]) < 1e-8) && (std::abs(elements[1]) < 1e-8) && (std::abs(elements[2]) < 1e-8);
+    }
 };
 
 typedef vec3 point3;
@@ -110,4 +114,8 @@ inline vec3 cross(const vec3 &u, const vec3 &v) {
 
 inline vec3 unit_vector(vec3 v) {
     return v / v.length();
+}
+
+inline vec3 reflected_vec(const vec3& vec_in, const vec3& normal) {
+    return vec_in - 2 * dot(vec_in, normal) * normal;
 }

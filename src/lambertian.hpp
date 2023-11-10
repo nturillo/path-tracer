@@ -10,6 +10,9 @@ public:
 
 	bool scatter(ray& r, const Hit_Record& rec, Color& ray_color) const override { //returns true if new ray is scattered
 		vec3 scatter_direction = rec.normal + vec3::random_unit_vec();
+		if (scatter_direction.near_zero()) {
+			scatter_direction = rec.normal;
+		}
 		r = ray(rec.point, scatter_direction);
 		ray_color = albedo * ray_color;
 		return true;
