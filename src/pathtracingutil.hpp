@@ -19,7 +19,7 @@ const double infinity = std::numeric_limits<double>::infinity();
 const double pi = 3.1415926535897932385;
 
 // Random Number Generator
-static std::mt19937_64 rng = std::mt19937_64(std::chrono::system_clock::now().time_since_epoch().count());
+static std::mt19937_64 rng = std::mt19937_64(1);
 
 // Utility Functions
 
@@ -36,6 +36,11 @@ inline double get_random_double(double min, double max) {
 }
 inline double get_gaussian_double(double mean, double std_dev) {
 	std::normal_distribution<double> dist(mean, std_dev);
+	return dist(rng);
+}
+
+inline int get_random_int(int min, int max) {
+	std::uniform_int_distribution<int> dist(min, max);
 	return dist(rng);
 }
 

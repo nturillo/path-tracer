@@ -24,7 +24,6 @@ public:
 	int image_height;
 	vec3 origin;
 	vec3 facing;
-	double focal_length;
 
 	//camera mechanics
 	int samples_per_pixel;
@@ -38,6 +37,7 @@ private:
 	int image_width;
 
 	//viewport
+	double focal_length = 1.0;
 	double viewport_width;
 	double real_aspect_ratio;
 

@@ -19,10 +19,9 @@ Camera::Camera(int _image_height, double _aspect_ratio, point3 _origin, vec3 _fa
 Camera::Camera(CameraPreset preset, point3 _origin, vec3 _facing) {
 	switch (preset) {
 	case CameraPreset::Standard:
-			image_height = 300;
+			image_height = 900;
 			aspect_ratio = 16.0 / 9.0;
-			focal_length = 1.0;
-			viewport_height = 2.0;
+			viewport_height = 0.8;
 			samples_per_pixel = 20;
 			max_depth = 50;
 			break;

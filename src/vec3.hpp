@@ -119,3 +119,11 @@ inline vec3 unit_vector(vec3 v) {
 inline vec3 reflected_vec(const vec3& vec_in, const vec3& normal) {
     return vec_in - 2 * dot(vec_in, normal) * normal;
 }
+
+inline vec3 refract(const vec3& vec_in, const vec3& normal, double etai_over_etat) {
+    vec3 unit_vec_in = unit_vector(vec_in);
+	double cos_theta = dot(-unit_vec_in, normal);
+	vec3 r_out_perp = etai_over_etat * (vec_in + cos_theta * normal);
+	vec3 r_out_parallel = -std::sqrt(1.0 - r_out_perp.length_squared()) * normal;
+	return r_out_parallel + r_out_perp;
+}
