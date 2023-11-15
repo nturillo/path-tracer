@@ -2,6 +2,10 @@
 #include <cfloat>
 #include <fstream>
 
+//cuda
+#include <cuda_runtime.h>
+#include <device_launch_parameters.h>
+
 #include "pathtracingutil.hpp"
 #include "sphere.hpp"
 #include "plane.hpp"
@@ -11,7 +15,16 @@
 #include "lambertian.hpp"
 #include "metal.hpp"
 
+//empty kernel
+__global__ void empty_kernel() {
+    printf("id = %d\n", threadIdx.x);
+}
+
 int main() {
+    empty_kernel<<<1, 256>>>();
+    cudaDeviceSynchronize();
+    return 0;
+
     //time
     auto start = std::chrono::high_resolution_clock::now();
     //output
@@ -35,7 +48,7 @@ int main() {
     shared_ptr<Material> sphere_red_ptr = make_shared<Lambertian>(sphere_red_mat);
     shared_ptr<Material> yellow_ptr = make_shared<Lambertian>(Lambertian(Color(0.8, 0.8, 0.1)));
     shared_ptr<Material> green_ptr = make_shared<Lambertian>(Lambertian(Color(0.1, 0.8, 0.1)));
-    shared_ptr<Material> metal_ptr2 = make_shared<Metal>(Metal(Color(1,1,1), 0.3));
+    shared_ptr<Material> metal_ptr2 = make_shared<Metal>(Metal(Color(1, 1, 1), 0.3));
     //Sphere earth = Sphere(point3(0, -50.5, -2), 50, earth_mat_ptr);
     Sphere sphere = Sphere(point3(-0.5, 0, -2), 0.5, sphere_blue_ptr);
     Sphere sphere2 = Sphere(point3(1, 0.2, -2.5), 0.7, metal_ptr);
@@ -45,7 +58,7 @@ int main() {
     world.add(make_shared<Plane>(earth_plane));
     world.add(make_shared<Sphere>(sphere));
     world.add(make_shared<Sphere>(sphere2));
-    
+
     //add more spheres
     for (int i = 0; i < 80; i++) {
         double radius = get_random_double(0.05, 0.2);
@@ -97,14 +110,14 @@ int main() {
         Sphere tempSphere = Sphere(point3(x, y, z), radius, mat_ptr);
         world.add(make_shared<Sphere>(tempSphere));
     }
-  
+
 
     //Render image:
     cam.render(world, output);
 
     //time
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::seconds>(end-start).count();
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
     std::cout << "Render time: " << duration << " seconds" << std::endl;
 
 }

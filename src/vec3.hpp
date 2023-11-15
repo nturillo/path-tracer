@@ -3,7 +3,7 @@
 #include <cmath>
 #include <iostream>
 
-
+#include "pathtracingutil.hpp"
 
 class vec3 {
     public:
